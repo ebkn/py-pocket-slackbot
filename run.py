@@ -22,8 +22,9 @@ def main():
     bot = Bot()
     bot.run()
 
-@respond_to('pocket-list')
+@listen_to('pocket-list')
 def list_tasks(message):
+    print(POCKET_ACCESS_TOKEN)
     try:
         data = pocket_instance.retrieve()
         articles = data['list'].values()
@@ -38,7 +39,7 @@ def list_tasks(message):
     except PocketException as e:
         message.send(e.message)
 
-@respond_to(r'pocket-add')
+@listen_to('pocket-add')
 def add_tasks(message):
     data = re.search(r'\s\<(http.+)\>\s(.+)', message.body['text'])
     if data is None:
@@ -60,6 +61,18 @@ def add_tasks(message):
         'Pocketに追加しました！\n```\n' +
         f'タイトル : {title}\n' +
         f'URL : {url}\n```'
+    )
+
+@listen_to('pocket-help')
+def help_pocket(message):
+    message.send(
+        '-使い方-\n```\n' +
+        '# Pocketの記事一覧を表示する*\n' +
+        'pocket-list\n\n' +
+        '# Pocketに記事を登録する\n' +
+        'pocket-add URL タイトル\n\n' +
+        '# Pocketのヘルプを表示する\n' +
+        'pocket-help\n```'
     )
 
 if __name__ == "__main__":
