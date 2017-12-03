@@ -41,16 +41,16 @@ def list_tasks(message):
 
 @listen_to('pocket-add')
 def add_tasks(message):
-    data = re.search(r'\s\<(http.+)\>\s(.+)', message.body['text'])
+    data = re.search(r'\s\<(http.+)\>\s*(.*)', message.body['text'])
     if data is None:
-        message.send('`pocked-add URL タイトル`という形式にしてください。')
+        message.send('`pocked-add URL (タイトル)`という形式にしてください。')
         return
 
     matched_url = data.group(1)
     matched_title = data.group(2)
 
-    if matched_url is None or matched_title is None :
-        message.send('`pocked-add URL タイトル`という形式にしてください。')
+    if matched_url is None:
+        message.send('`pocked-add URL (タイトル)`という形式にしてください。')
         return
 
     url = matched_url
